@@ -1,0 +1,63 @@
+Convention Over Configuration
+    source code is assumed to be in ${basedir}/src/main/java and resources are assumed to be in
+    ${basedir}/src/main/resources. Tests are assumed to be in ${basedir}/src/test, and a project is assumed
+    to produce a JAR file. Maven assumes that you want the compile byte code to ${basedir}/target/classes
+    and then create a distributable JAR file in ${basedir}/target
+war
+    If you wanted to deploy a
+    web application and not a JAR, all you would need to do is change your project type to war and put your
+    docroot in ${basedir}/src/main/webap
+setting.xml
+    If you need to customize Maven, it is customary to override any
+    settings in a settings.xml file stored in ~/.m2.
+~/.m2/settings.xml
+    A file containing user-specific configuration for authentication, repositories, and other information
+    to customize the behavior of Maven.
+~/.m2/repository/
+    This directory contains your local Maven repository. When you download a dependency from a
+    remote Maven repository, Maven stores a copy of the dependency in your local repository
+The Project Object Model -POM
+
+archetype
+    An archetype is defined as an original pattern or model from which all other things of the same kind are made.
+    In Maven, an archetype is a template of a project which is combined with some user input to produce a working Maven
+    project that has been tailored to the user's requirements
+    mvn -B archetype:generate \
+      -DarchetypeGroupId=org.apache.maven.archetypes \
+      -DgroupId=com.mycompany.app \
+      -DartifactId=my-app
+mvn complie  test
+mvn package
+    create a JAR and install it in my local repository? 打包
+mvn install
+    install the artifact you've generated (the JAR file) in your local repository (${user.home}/.m2/repository is the default location)
+test
+    Note that the surefire plugin (which executes the test) looks for tests contained in files with a particular naming convention. By default the tests included are:
+    **/*Test.java
+    **/Test*.java
+    **/*TestCase.java
+resource
+    You see below in our example we have added the directory ${basedir}/src/main/resources into which we place
+    any resources we wish to package in our JAR. The simple rule employed by Maven is this: any directories or
+    files placed within the ${basedir}/src/main/resources directory are packaged in your JAR with the exact same
+    structure starting at the base of the JAR.
+How do I deploy my jar in my remote repository?
+    For deploying jars to an external repository, you have to configure the repository url in the pom.xml and the authentication information for connectiong to the repository in the settings.xml.
+    在setting.xml中配置
+     <servers>
+        <server>
+          <id>mycompany-repository</id>
+          <username>jvanzyl</username>
+          <!-- Default value is ~/.ssh/id_dsa -->
+          <privateKey>/path/to/identity</privateKey> (default is ~/.ssh/id_dsa)
+          <passphrase>my_key_passphrase</passphrase>
+        </server>
+      </servers>
+the super pom
+     All Maven project POMs extend the Super POM, which defines a set of defaults shared by all projects.
+    The Super POM defines some standard configuration variables that are inherited by all projects
+Project Versions
+    <major version>.<minor version>.<incremental version>-<qualifier>
+properties refrence
+    访问属性 ${project.name}
+
